@@ -5,6 +5,7 @@ import { GlobalStyle } from "../styles/global-style";
 import { theme } from '../styles/theme';
 import { useEffect, useState } from 'react';
 import { authService } from '../firebase/firebase';
+import Nav from '../components/nav';
 
 function MyApp({ Component, pageProps }) {
   const [init, setInit] = useState<boolean>(false);
