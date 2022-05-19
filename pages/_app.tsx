@@ -3,8 +3,11 @@ import Head from 'next/head';
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "../styles/global-style";
 import { theme } from '../styles/theme';
+import { useState } from 'react';
+import { authService } from '../firebase/firebase';
 
 function MyApp({ Component, pageProps }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
   return (
     <>
       <Head>
@@ -13,7 +16,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <GlobalStyle/>
       <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
+        <Component {...pageProps} isLoggedIn={isLoggedIn} />
       </ThemeProvider>
     </>
   )
