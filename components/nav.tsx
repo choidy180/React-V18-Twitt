@@ -19,6 +19,11 @@ const Nav: NextPage = () => {
           </Link>
         </Li>
         <Li>
+          <Link href={"/upload"}>
+            <Tag>UPLOAD</Tag>
+          </Link>
+        </Li>
+        <Li>
           <Link href={"/profile"}>
             <Tag>PROFILE</Tag>
           </Link>
@@ -46,7 +51,11 @@ const Ul = styled.ul`
 const Li = styled.li`
   font-family: 'NEXON Lv2 Gothic';
   font-size: 1.2rem;
+  transition: all .15s ease-in-out;
   cursor: pointer;
+  :hover{
+    color: ${props => props.theme.color.pink};
+  }
 `
 const Tag = styled.span`
 `
