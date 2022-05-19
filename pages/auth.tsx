@@ -1,10 +1,13 @@
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import type { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
+import { authService } from "../firebase/firebase";
 
 const Auth: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [newAccount, setNewAccount] = useState(false);
   const onChange = (event) => {
     const {
       target : {name, value},
@@ -15,8 +18,29 @@ const Auth: NextPage = () => {
       setPassword(value);
     }
   }
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
+    try {
+      let data;
+      if(newAccount){
+        // 회원가입
+        data = await createUserWithEmailAndPassword(
+          authService,
+          email,
+          password
+        )
+      } else {
+        // 로그인
+        data = await signInWithEmailAndPassword(
+          authService,
+          email,
+          password
+        )
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <Container>
@@ -40,7 +64,7 @@ const Auth: NextPage = () => {
         />
         <Input
           type="submit"
-          value="Login"
+          value={newAccount ? "회원가입" : "로그인"}
         />
       </Form>
       <BtnDiv>
@@ -56,7 +80,7 @@ const Container = styled.div`
 const Form = styled.form`
   padding-top: 20px;
   display: flex;
-  gap: 4px;
+  gap: 10px;
 `
 const Input = styled.input`
   width: auto;
@@ -70,6 +94,7 @@ const Input = styled.input`
 `
 const BtnDiv = styled.div`
   display: flex;
+  gap: 6px;
 `
 const SNSBtn = styled.button`
   padding: 8px 12px;

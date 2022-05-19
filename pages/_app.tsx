@@ -3,11 +3,23 @@ import Head from 'next/head';
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "../styles/global-style";
 import { theme } from '../styles/theme';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { authService } from '../firebase/firebase';
 
 function MyApp({ Component, pageProps }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
+  const [init, setInit] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  // component mount
+  useEffect(()=>{
+    authService.onAuthStateChanged((user) => {
+      if(user){
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+      setInit(true);
+    })
+  })
   return (
     <>
       <Head>
@@ -16,7 +28,8 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <GlobalStyle/>
       <ThemeProvider theme={theme}>
-        <Component {...pageProps} isLoggedIn={isLoggedIn} />
+        <Component {...pageProps} {...isLoggedIn} />
+        <footer>&copy;{new Date().getFullYear()}Twitter</footer>
       </ThemeProvider>
     </>
   )
