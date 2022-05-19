@@ -14,7 +14,7 @@ const Nav: NextPage = () => {
     <Container>
       <Ul>
         <Li>
-          <Link href={"/"}>
+          <Link href={"/home"}>
             <Tag>HOME</Tag>
           </Link>
         </Li>
