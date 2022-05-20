@@ -37,9 +37,12 @@ const Main: NextPage = () => {
       <button onClick={clickTest}>테스트</button>
       <Box>
         {newContent.map((content,i) =>(
-          <div key={content.id}>
+          <ContentBox key={content.id}>
+            {newContent[i]["image"] && (
+              <img src={newContent[i]["image"]} alt="" />
+            )}
             <p>{content.text}</p>
-          </div>
+          </ContentBox>
         ))}
       </Box>
     </Container>
@@ -57,6 +60,22 @@ const Box = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+`
+const ContentBox = styled.div`
+  width: calc(100% - 38px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  img{
+    width: 100%;
+  }
+  p{
+    margin-top: 12px;
+    font-size: 1.4rem;
+    font-family: 'NEXON Lv1 Gothic OTF';
+  }
 `
 
 export default Main;
