@@ -85,6 +85,11 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0px;
         padding: 0px;
     }
+    footer{
+        font-family: 'NEXON Lv1 Gothic OTF';
+        padding: 12px;
+        width: calc(100% - 24px);
+    }
     button {
         background: none;
         padding: 0;

@@ -5,7 +5,7 @@ export const theme: DefaultTheme = {
     pink: "#FE0359",
     dark: "#141414",
     purple: "#8661de",
-    blue: "#00bac7",
+    blue: "#176BEF",
     gray: "#f6f6f6",
     green: "#07b495",
     lightGreen: "#99ecdd",
