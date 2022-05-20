@@ -34,10 +34,15 @@ const Main: NextPage = () => {
   return(
     <Container>
       <Nav/>
-      <button onClick={clickTest}>테스트</button>
       <Box>
         {newContent.map((content,i) =>(
           <ContentBox key={content.id}>
+            <ImageContainer>
+              <ImageBox>
+                <img src="/images/a48eb5f4230f9a24e273cf605a2c0f24a0f691bd.gif" alt="" />
+              </ImageBox>
+              <LoaderEmail>{content.email}</LoaderEmail>
+            </ImageContainer>
             {newContent[i]["image"] && (
               <img src={newContent[i]["image"]} alt="" />
             )}
@@ -61,6 +66,7 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 2px;
 `
 const ContentBox = styled.div`
   width: calc(100% - 38px);
@@ -68,6 +74,8 @@ const ContentBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  background-color: white;
+  padding-bottom: 10px;
   img{
     width: 100%;
   }
@@ -76,6 +84,31 @@ const ContentBox = styled.div`
     font-size: 1.4rem;
     font-family: 'NEXON Lv1 Gothic OTF';
   }
+  :not(:last-of-type){
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e9e9e9;
+  }
+`
+const ImageContainer = styled.div`
+  width: calc(100% - 24px);
+  padding: 12px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`
+const ImageBox = styled.div`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+`
+
+const LoaderEmail = styled.span`
+  font-size: 1.4rem;
+  margin-left: 8px;
 `
 
 export default Main;
