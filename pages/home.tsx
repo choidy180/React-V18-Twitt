@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { dbService } from "../firebase/firebase";
+import Link from "next/link";
 
 const Main: NextPage = () => {
   const [content, setContent] = useState("");
@@ -36,18 +37,20 @@ const Main: NextPage = () => {
       <Nav/>
       <Box>
         {newContent.map((content,i) =>(
-          <ContentBox key={content.id}>
-            <ImageContainer>
-              <ImageBox>
-                <img src="/images/a48eb5f4230f9a24e273cf605a2c0f24a0f691bd.gif" alt="" />
-              </ImageBox>
-              <LoaderEmail>{content.email}</LoaderEmail>
-            </ImageContainer>
-            {newContent[i]["image"] && (
-              <img src={newContent[i]["image"]} alt="" />
-            )}
-            <p>{content.text}</p>
-          </ContentBox>
+            <ContentBox key={content.id}>
+                <ImageContainer>
+                  <ImageBox>
+                    <img src="/images/a48eb5f4230f9a24e273cf605a2c0f24a0f691bd.gif" alt="" />
+                  </ImageBox>
+                  <LoaderEmail>{content.email}</LoaderEmail>
+                </ImageContainer>
+                <Link href={`/detail/${content.id}`}>
+                  {newContent[i]["image"] && (
+                    <img src={newContent[i]["image"]} alt="" />
+                  )}
+                </Link>
+              <p>{content.text}</p>
+            </ContentBox>
         ))}
       </Box>
     </Container>
@@ -78,6 +81,7 @@ const ContentBox = styled.div`
   padding-bottom: 10px;
   img{
     width: 100%;
+    cursor: pointer;
   }
   p{
     margin-top: 12px;

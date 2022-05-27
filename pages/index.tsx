@@ -5,11 +5,12 @@ import {
   signInWithEmailAndPassword, 
   signInWithPopup 
 } from "firebase/auth";
+import { addDoc, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
-import { authService } from "../firebase/firebase";
+import { authService, dbService } from "../firebase/firebase";
 
 const Home: NextPage = (isLoggedIn) => {
   const router = useRouter();
@@ -57,18 +58,38 @@ const Home: NextPage = (isLoggedIn) => {
       target: {name},
     } = event;
     let provider;
+    let result;
+    const dataBase = collection(dbService, "Profile");
     if(name === "google"){
       provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(authService, provider);
+      result = await signInWithPopup(authService, provider);
       const credential = GoogleAuthProvider.credentialFromResult(result);
-      await router.push("/home");
     }
     if(name === "github"){
       provider = new GithubAuthProvider();
-      const result = await signInWithPopup(authService, provider);
+      result = await signInWithPopup(authService, provider);
       const credential = GithubAuthProvider.credentialFromResult(result);
-      await router.push("/home");
     }
+    let getUserEmail = String(result["user"]["reloadUserInfo"]["email"]);
+    const usersCollectionRef = collection(dbService, "Profile");
+    const q = await query(
+      usersCollectionRef,
+      where("email", "==",getUserEmail)
+    );
+    const getProfileData = await getDocs(q);
+    const newData = getProfileData.docs.map(doc => ({ ...doc.data() }));
+    if(newData[0] === undefined){
+      await addDoc(dataBase, {
+        email : result["user"]["email"],
+        displayName: result["user"]["displayName"],
+        photoUrl: result["user"]["photoURL"],
+        createAt: Date.now(),
+        updateAt: Date.now(),
+      })
+    } else {
+      console.log("유저 정보 존재함");
+    }
+    router.push("/home");
   }
   return (
     <Container>

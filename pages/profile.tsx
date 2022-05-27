@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Nav from "../components/nav";
 import { authService } from "../firebase/firebase";
 
-const Profile: NextPage = (props) => {
+const Profile: NextPage = ({props}:any) => {
   const [attachment,setAttachment] = useState<String>("");    // 변경할 이미지
   const [displayName, setDisplayName] = useState<any>(""); // 변경할 이름
   const [phoneNumber, setPhoneNumber] = useState<String>(""); // 변경할 번호
@@ -44,7 +44,7 @@ const Profile: NextPage = (props) => {
       setGetEmail(user.email)
       setGetName(user.displayName);
       setGetNumber(user.phoneNumber);
-    })
+    });
   },[]);
   return(
     <Container>
