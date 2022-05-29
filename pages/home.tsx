@@ -2,26 +2,40 @@ import { NextPage } from "next";
 import Nav from "../components/nav";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { dbService } from "../firebase/firebase";
 import Link from "next/link";
 
 const Main: NextPage = () => {
-  const [content, setContent] = useState("");
+  const [userImage, setUserImage] = useState([]);
+  const [testData, setTestData] = useState({id: "안녕하세요"});
   const [newContent, setNewContent] = useState([]);
+  const usersCollectionRef = collection(dbService, "Profile");
   const getNewContent = async () => {
     const content = await getDocs(collection(dbService, "Content"));
-    content.forEach((document) => {
-      const contentObj = {
-        ...document.data(),
-        id: document.id,
-      };
-      setNewContent((prev) => [contentObj, ...prev]);
-    });
-  }
-  const clickTest = () => {
-    console.log(newContent);
-  }
+    const responseDataList = await Promise.all(
+      content.docs.map(document => {
+        const contentObj = {
+          ...document.data(),
+          id: document.id,
+        }
+        const getProfileImage = async () => {
+          const q = await query(
+            usersCollectionRef,
+            where("email", "==",contentObj["email"])
+          );
+          const getProfileData = await getDocs(q);
+          const newData = getProfileData.docs.map((doc) => ({ 
+            ...doc.data()
+          }));
+          
+          setUserImage((prev) => [newData[0], ...prev]);
+        } 
+        setNewContent((prev) => [contentObj, ...prev]);
+        getProfileImage();
+      })
+    )
+  };
   useEffect(()=>{
     getNewContent();
     onSnapshot(collection(dbService, "Content"), (snapshot) => {
@@ -31,7 +45,7 @@ const Main: NextPage = () => {
       }));
       setNewContent(ContentArray);
     })
-  },[])
+  },[]);
   return(
     <Container>
       <Nav/>
@@ -40,7 +54,9 @@ const Main: NextPage = () => {
             <ContentBox key={content.id}>
                 <ImageContainer>
                   <ImageBox>
-                    <img src="/images/a48eb5f4230f9a24e273cf605a2c0f24a0f691bd.gif" alt="" />
+                    <img src={content && Boolean(userImage.filter(item => item.email === content.email)[0]) 
+                      ? userImage.filter(item => item.email === content.email)[0]["photoUrl"]
+                      : "a48eb5f4230f9a24e273cf605a2c0f24a0f691bd.gif"} alt="" />
                   </ImageBox>
                   <LoaderEmail>{content.email}</LoaderEmail>
                 </ImageContainer>
@@ -77,7 +93,6 @@ const ContentBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  background-color: white;
   padding-bottom: 10px;
   img{
     width: 100%;

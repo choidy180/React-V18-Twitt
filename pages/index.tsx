@@ -89,7 +89,7 @@ const Home: NextPage = (isLoggedIn) => {
     } else {
       console.log("유저 정보 존재함");
     }
-    router.push("/home");
+    // router.push("/home");
   }
   return (
     <Container>
