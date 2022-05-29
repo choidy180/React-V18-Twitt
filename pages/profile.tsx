@@ -27,9 +27,6 @@ const Profile: NextPage = ({props}:any) => {
       setPhoneNumber(value);
     }
   }
-  const viewInfo = async () => {
-    console.log(userInfo);
-  }
   const onSubmit = (event) => {
     event.preventDefault();
     updateProfile(userInfo,{
@@ -50,7 +47,6 @@ const Profile: NextPage = ({props}:any) => {
     <Container>
       <Nav/>
       <Box>
-        <button onClick={viewInfo}>정보보기</button>
         <Form>
           <ImageBox htmlfor="inputImage">
             <img 

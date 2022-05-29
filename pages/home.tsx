@@ -8,7 +8,6 @@ import Link from "next/link";
 
 const Main: NextPage = () => {
   const [userImage, setUserImage] = useState([]);
-  const [testData, setTestData] = useState({id: "안녕하세요"});
   const [newContent, setNewContent] = useState([]);
   const usersCollectionRef = collection(dbService, "Profile");
   const getNewContent = async () => {
